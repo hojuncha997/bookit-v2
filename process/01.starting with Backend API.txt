@@ -1,0 +1,68 @@
+1. backend api 생성 테스트
+
+app 디렉토리에 api 디렉토리를 만들고 그 안에 다시 rooms 디렉토리를 만든다.
+거기에 route.ts를 만들어서 아래와 같이 적어주었다.
+
+import { NextRequest, NextResponse } from "next/server";
+
+export async function GET(request: NextRequest) {
+  return NextResponse.json({
+    data: "hello",
+  });
+}
+
+브라우저에서 아래 경로로 진입하면
+http://localhost:3000/api/rooms
+
+
+아래와 같이 데이터가 반환된다.
+
+{
+    "data": "hello"
+}
+
+2. next-connect  설치
+: next.js에서의 라우팅을 좀 더 효율적이고 용이하게 해준다. 프로미스 기반의 미들웨어 레이어이다.
+    npm i next-connect
+
+이를 통해 컨트롤러를 따로 분리하고 route.ts에서 해당 API를 불러다가 사용할 수 있다.
+루트폴더에서 backend 폴더를 만들고 그 안에 controller 폴더를 만든다. 거기에 roomControllers.ts를 만든다.
+
+파일의 내용은 아래와 같다.
+
+import { NextRequest, NextResponse } from "next/server";
+
+export const allRooms = async (req: NextRequest) => {
+  return NextResponse.json({
+    data: "hello",
+  });
+};
+
+그리고 /app/api/rooms/route.ts의 내용을 전부 지우고 아래와 같이 작성한다.
+
+
+import { allRooms } from "@/backend/controllers/roomControllers";
+import { createEdgeRouter } from "next-connect";
+import { NextRequest } from "next/server";
+
+interface RequestContext {
+  params: {
+    id: string;
+  };
+}
+
+const router = createEdgeRouter<NextRequest, RequestContext>();
+
+router.get(allRooms); // 컨트롤러에 만들어 놓은 API사용
+
+export async function GET(request: NextRequest, ctx: RequestContext) {
+  return router.run(request, ctx);
+}
+
+http://localhost:3000/api/rooms를 새로고침 해보면 제대로
+
+{
+    "data": "hello"
+}
+
+가 보이는 것을 확인할 수 있다.
