@@ -1,0 +1,22 @@
+1. /bookit-v2/backend/models/room.ts 생성
+2. 도큐먼트 스키마 및 인터페이스 생성
+    작성 순서는 아래와 같음
+
+    /*
+
+      작성한 순서
+
+      몽구스 임포트
+      const roomSchema: Schema = new Schema({
+      을 통해 스키마 정의.
+
+      IRoom 인터페이스를 만들어서 IRoom을 Document로 사용할 수 있도록 함.
+
+      location은 ILocation 인터페이스로 정의.
+
+      images는 IImage 인터페이스로 정의.
+
+      reviews는 IReview 인터페이스로 정의.
+
+      IRoom 인터페이스를 다시 수정(IImage, IReview, ILocation 사용).
+      */
