@@ -13,7 +13,7 @@ export const allRooms = async (req: NextRequest) => {
   });
 };
 
-// 개별 룸 생성
+// 개별 룸 생성 Create New Room => /api/admin/rooms/
 export const newRoom = async (req: NextRequest) => {
   // 룸 생성을 위해 전달되는 정보
   const body = await req.json();
@@ -49,7 +49,7 @@ export const getRoomDetails = async (
   });
 };
 
-// 개별 룸 수정 Update Room Details => /api/rooms/:id
+// 개별 룸 수정 Update Room Details => /api/admin/rooms/:id
 export const updateRoom = async (
   req: NextRequest,
   { params }: { params: { id: string } }
@@ -72,5 +72,30 @@ export const updateRoom = async (
   return NextResponse.json({
     success: true,
     room,
+  });
+};
+
+// 개별 룸 삭제 Delete Room => /api/admin/rooms/:id
+export const deleteRoom = async (
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) => {
+  const room = await Room.findById(params.id);
+
+  if (!room) {
+    return NextResponse.json(
+      {
+        message: "Room not found",
+      },
+      { status: 404 }
+    );
+  }
+
+  // TODO - Delete images associated with the room
+
+  await room.deleteOne();
+
+  return NextResponse.json({
+    success: true,
   });
 };
