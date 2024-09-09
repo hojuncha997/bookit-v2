@@ -48,3 +48,29 @@ export const getRoomDetails = async (
     room,
   });
 };
+
+// 개별 룸 수정 Update Room Details => /api/rooms/:id
+export const updateRoom = async (
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) => {
+  let room = await Room.findById(params.id);
+  const body = await req.json();
+
+  if (!room) {
+    return NextResponse.json(
+      {
+        // success: false,
+        message: "Room not found",
+      },
+      { status: 404 }
+    );
+  }
+
+  room = await Room.findByIdAndUpdate(params.id, body, { new: true });
+
+  return NextResponse.json({
+    success: true,
+    room,
+  });
+};

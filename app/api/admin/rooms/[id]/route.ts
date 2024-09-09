@@ -1,8 +1,5 @@
 import dbConnect from "@/backend/config/dbConnect";
-import {
-  getRoomDetails,
-  updateRoom,
-} from "@/backend/controllers/roomControllers";
+import { updateRoom, newRoom } from "@/backend/controllers/roomControllers";
 import { createEdgeRouter } from "next-connect";
 import { NextRequest } from "next/server";
 
@@ -16,8 +13,9 @@ const router = createEdgeRouter<NextRequest, RequestContext>();
 
 dbConnect();
 
-router.get(getRoomDetails);
+router.put(updateRoom);
 
-export async function GET(request: NextRequest, ctx: RequestContext) {
+export async function PUT(request: NextRequest, ctx: RequestContext) {
+  console.log("PUT request---------------------><", request);
   return router.run(request, ctx);
 }
