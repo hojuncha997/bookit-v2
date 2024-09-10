@@ -6,6 +6,10 @@ import { NextRequest, NextResponse } from "next/server";
 //비동기 작업을 수행하고 그 결과로 NextResponse를 반환하는 함수들에 대한 타입을 정의
 type HandlerFunction = (req: NextRequest, params: any) => Promise<NextResponse>;
 
+interface IValidationError {
+  message: string;
+}
+
 export const catchAsyncErrors =
   (handler: HandlerFunction) => async (req: NextRequest, params: any) => {
     try {
@@ -13,6 +17,21 @@ export const catchAsyncErrors =
       return await handler(req, params);
     } catch (error: any) {
       // 에러가 발생하면 에러 메시지를 반환
+
+      // 에러의 종류가 캐스팅 에러인 경우: 존재하지 않는 리소스를 요청한 경우
+      if (error.name === "CastError") {
+        const message = `Resource not found. Invalid: ${error?.path}`;
+        error.statusCode = 400;
+      }
+
+      // 에러의 종류가 유효성 검사 에러인 경우
+      if (error.name === "ValidationError") {
+        error.message = Object.values<IValidationError>(error.errors).map(
+          (value: any) => value.message
+        );
+        error.statusCode = 400;
+      }
+
       return NextResponse.json(
         {
           message: error.message,
