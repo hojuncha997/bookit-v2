@@ -31,22 +31,33 @@ export const getRoomDetails = async (
   req: NextRequest,
   { params }: { params: { id: string } }
 ) => {
-  const room = await Room.findById(params.id);
+  try {
+    const room = await Room.findById(params.id);
 
-  if (!room) {
+    throw new Error("Hello");
+
+    if (!room) {
+      return NextResponse.json(
+        {
+          // success: false,
+          message: "Room not found",
+        },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({
+      success: true,
+      room,
+    });
+  } catch (error: any) {
     return NextResponse.json(
       {
-        // success: false,
-        message: "Room not found",
+        message: error.message,
       },
       { status: 404 }
     );
   }
-
-  return NextResponse.json({
-    success: true,
-    room,
-  });
 };
 
 // 개별 룸 수정 Update Room Details => /api/admin/rooms/:id
