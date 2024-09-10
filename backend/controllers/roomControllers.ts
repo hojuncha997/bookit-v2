@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Room from "../models/room"; // 룸 모델
+import ErrorHandler from "../utils/errorHandler";
 
 export const allRooms = async (req: NextRequest) => {
   const resPerPage: number = 8;
@@ -34,9 +35,11 @@ export const getRoomDetails = async (
   try {
     const room = await Room.findById(params.id);
 
-    throw new Error("Hello");
+    // throw new Error("Hello");
+    throw new ErrorHandler("Hello", 400);
 
     if (!room) {
+      console.log("there is no room");
       return NextResponse.json(
         {
           // success: false,
@@ -51,11 +54,12 @@ export const getRoomDetails = async (
       room,
     });
   } catch (error: any) {
+    console.log(error.statusCode);
     return NextResponse.json(
       {
         message: error.message,
       },
-      { status: 404 }
+      { status: error.statusCode }
     );
   }
 };
