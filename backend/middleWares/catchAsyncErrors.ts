@@ -20,12 +20,14 @@ export const catchAsyncErrors =
 
       // 에러의 종류가 캐스팅 에러인 경우: 존재하지 않는 리소스를 요청한 경우
       if (error.name === "CastError") {
+        // 몽고DB에서 사용하는 에러
         const message = `Resource not found. Invalid: ${error?.path}`;
         error.statusCode = 400;
       }
 
       // 에러의 종류가 유효성 검사 에러인 경우
       if (error.name === "ValidationError") {
+        // 몽고DB에서 사용하는 에러
         error.message = Object.values<IValidationError>(error.errors).map(
           (value: any) => value.message
         );
