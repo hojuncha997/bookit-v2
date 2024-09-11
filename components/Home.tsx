@@ -1,7 +1,15 @@
-import React from "react";
+"use client";
+
+import React, { useEffect } from "react";
 import RoomItem from "./room/RoomItem";
+import { toast } from "react-hot-toast";
 
 const Home = () => {
+  useEffect(() => {
+    toast.success("Success");
+    toast.error("Error");
+  }, []);
+
   return (
     <div>
       <div>
@@ -11,13 +19,6 @@ const Home = () => {
             <i className="fa fa-arrow-left"></i> Back to Search
           </a>
           <div className="row mt-4">
-            <RoomItem />
-            <RoomItem />
-            <RoomItem />
-            <RoomItem />
-            <RoomItem />
-            <RoomItem />
-            <RoomItem />
             <RoomItem />
           </div>
         </section>
