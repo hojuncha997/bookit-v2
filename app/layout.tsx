@@ -6,6 +6,8 @@ import "./globals.css";
 import Head from "./head";
 import Script from "next/script";
 import { GlobalProvider } from "./GlobalProvider";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -32,7 +34,12 @@ export default function RootLayout({
     <html lang="en">
       <Head />
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <GlobalProvider>{children}</GlobalProvider>
+        <GlobalProvider>
+          <Header />
+          {children}
+          <Footer />
+        </GlobalProvider>
+
         <Script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></Script>
         <Script src="https://kit.fontawesome.com/e708b429e9.js"></Script>
       </body>
