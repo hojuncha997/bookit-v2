@@ -3,11 +3,10 @@ import Room, { IRoom } from "../models/room"; // 룸 모델
 import ErrorHandler from "../utils/errorHandler";
 import { catchAsyncErrors } from "../middleWares/catchAsyncErrors";
 import APIFilters from "../utils/apiFilters";
+import room from "../models/room";
 
 export const allRooms = catchAsyncErrors(async (req: NextRequest) => {
-  const resPerPage: number = 8;
-
-  // const rooms = await Room.find();
+  const resPerPage: number = 4;
 
   // Next.js에서는 URL을 사용하여 요청을 객체로 만들고 searchParams를 사용하여 쿼리 문자열을 가져올 수 있다.
   const { searchParams } = new URL(req.url);
@@ -18,15 +17,22 @@ export const allRooms = catchAsyncErrors(async (req: NextRequest) => {
   searchParams.forEach((value, key) => {
     queryStr[key] = value;
   });
-
   // console.log(queryStr); // { location: 'buffalo', guestCapacity: '3' }
+
+  const roomsCount: number = await Room.countDocuments(); // 전체 룸 수
 
   const apiFilters = new APIFilters(Room, queryStr).search().filter(); // Room 모델과 쿼리 문자열을 전달하여 APIFilters 클래스의 인스턴스를 만든 후 search 메서드를 호출
 
-  const rooms: IRoom[] = await apiFilters.query;
+  let rooms: IRoom[] = await apiFilters.query;
+  const filteredRoomsCount: number = rooms.length; // 필터링하여 검색된 총 룸 수
+
+  apiFilters.pagination(resPerPage);
+  rooms = await apiFilters.query.clone(); // clone 메서드를 사용하여 쿼리를 복제하고 다시 할당
 
   return NextResponse.json({
     success: true,
+    roomsCount,
+    filteredRoomsCount,
     resPerPage,
     rooms,
   });

@@ -28,17 +28,30 @@ class APIFilters {
     return this;
   }
 
+  // 검색 시 필터링을 위한 메서드
   filter(): APIFilters {
     const queryCopy = { ...this.queryStr };
 
     // location 필드는 기본적으로 검색에서 제외하기 위해 배열에 추가. 왜냐하면 이미 search 메서드에서 location 필드를 검색하고 있기 때문.
-    const removetFields = ["location"];
+    // 마찬가지로 page 필드도 제외한다. 왜냐하면 pagination 메서드에서 page 필드를 처리할 것이기 때문.
+    const removetFields = ["location", "page"];
 
     // 쿼리스트링에서 필터링할 필드를 제거
     removetFields.forEach((el) => delete queryCopy[el]);
 
     // 필터링된 쿼리스트링을 사용해 쿼리를 만들고 그것을 자신에게 재할당
     this.query = this.query.find(queryCopy);
+
+    return this;
+  }
+
+  pagination(resPerPage: number): APIFilters {
+    const currentPage = Number(this.queryStr?.page) || 1;
+
+    const skip = resPerPage * (currentPage - 1); // 응답에서 제외할 레코드 수
+
+    // 아래 쿼리는 resPerPage만큼의 레코드를 가져오되 skip만큼의 레코드는 제외하고 가져오겠다는 의미
+    this.query = this.query.limit(resPerPage).skip(skip);
 
     return this;
   }
