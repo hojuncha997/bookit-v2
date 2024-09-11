@@ -21,7 +21,7 @@ export const allRooms = catchAsyncErrors(async (req: NextRequest) => {
 
   // console.log(queryStr); // { location: 'buffalo', guestCapacity: '3' }
 
-  const apiFilters = new APIFilters(Room, queryStr).search(); // Room 모델과 쿼리 문자열을 전달하여 APIFilters 클래스의 인스턴스를 만든 후 search 메서드를 호출
+  const apiFilters = new APIFilters(Room, queryStr).search().filter(); // Room 모델과 쿼리 문자열을 전달하여 APIFilters 클래스의 인스턴스를 만든 후 search 메서드를 호출
 
   const rooms: IRoom[] = await apiFilters.query;
 

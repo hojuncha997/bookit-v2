@@ -7,6 +7,7 @@ class APIFilters {
     this.queryStr = queryStr;
   }
 
+  // 쿼리스트링을 사용해
   search(): APIFilters {
     const location = this.queryStr?.location
       ? {
@@ -22,6 +23,23 @@ class APIFilters {
     //  쿼리는 이 쿼리를 호출한 함수에서 awiat를 사용해 실행한다. e.g. const rooms: IRoom[] = await apiFilters.query;
     //  이러한 이유로 최초에 모델을 할당하는 변수의 이름이 query인 것이다. query에 담긴 모델을 사용해 쿼리를 만들고 그것을 자신에게 재할당 하기 때문이다.
     this.query = this.query.find({ ...location });
+
+    // APIFilters의 인스턴스를 반환
+    return this;
+  }
+
+  filter(): APIFilters {
+    const queryCopy = { ...this.queryStr };
+
+    // location 필드는 기본적으로 검색에서 제외하기 위해 배열에 추가. 왜냐하면 이미 search 메서드에서 location 필드를 검색하고 있기 때문.
+    const removetFields = ["location"];
+
+    // 쿼리스트링에서 필터링할 필드를 제거
+    removetFields.forEach((el) => delete queryCopy[el]);
+
+    // 필터링된 쿼리스트링을 사용해 쿼리를 만들고 그것을 자신에게 재할당
+    this.query = this.query.find(queryCopy);
+
     return this;
   }
 }
