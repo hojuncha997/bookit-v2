@@ -1,12 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
-import Room from "../models/room"; // 룸 모델
+import Room, { IRoom } from "../models/room"; // 룸 모델
 import ErrorHandler from "../utils/errorHandler";
 import { catchAsyncErrors } from "../middleWares/catchAsyncErrors";
+import APIFilters from "../utils/apiFilters";
 
 export const allRooms = catchAsyncErrors(async (req: NextRequest) => {
   const resPerPage: number = 8;
 
-  const rooms = await Room.find();
+  // const rooms = await Room.find();
+
+  // Next.js에서는 URL을 사용하여 요청을 객체로 만들고 searchParams를 사용하여 쿼리 문자열을 가져올 수 있다.
+  const { searchParams } = new URL(req.url);
+  console.log(searchParams); // URLSearchParams { 'location' => 'buffalo', 'guestCapacity' => '3' }
+
+  const queryStr: any = {};
+
+  searchParams.forEach((value, key) => {
+    queryStr[key] = value;
+  });
+
+  // console.log(queryStr); // { location: 'buffalo', guestCapacity: '3' }
+
+  const apiFilters = new APIFilters(Room, queryStr).search(); // Room 모델과 쿼리 문자열을 전달하여 APIFilters 클래스의 인스턴스를 만든 후 search 메서드를 호출
+
+  const rooms: IRoom[] = await apiFilters.query;
 
   return NextResponse.json({
     success: true,
@@ -46,42 +63,6 @@ export const getRoomDetails = catchAsyncErrors(
     });
   }
 );
-
-// export const getRoomDetails = async (
-//   req: NextRequest,
-//   { params }: { params: { id: string } }
-// ) => {
-//   try {
-//     const room = await Room.findById(params.id);
-
-//     // throw new Error("Hello");
-//     throw new ErrorHandler("Hello", 400);
-
-//     if (!room) {
-//       console.log("there is no room");
-//       return NextResponse.json(
-//         {
-//           // success: false,
-//           message: "Room not found",
-//         },
-//         { status: 404 }
-//       );
-//     }
-
-//     return NextResponse.json({
-//       success: true,
-//       room,
-//     });
-//   } catch (error: any) {
-//     console.log(error.statusCode);
-//     return NextResponse.json(
-//       {
-//         message: error.message,
-//       },
-//       { status: error.statusCode }
-//     );
-//   }
-// };
 
 // 개별 룸 수정 Update Room Details => /api/admin/rooms/:id
 export const updateRoom = catchAsyncErrors(
