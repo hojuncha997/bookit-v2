@@ -2,14 +2,8 @@
 
 import React, { useEffect } from "react";
 import RoomItem from "./room/RoomItem";
-import { toast } from "react-hot-toast";
 
 const Home = () => {
-  useEffect(() => {
-    toast.success("Success");
-    toast.error("Error");
-  }, []);
-
   return (
     <div>
       <div>
