@@ -34,7 +34,7 @@ const Home = ({ data }: Props) => {
           {/* <h2 className="mb-3 ml-2 stays-heading">{location ? `${rooms?.filteredRoomsCount} rooms found in ${location}` : "All rooms" }</h2> // 이걸 써야하는데 스키마에 filteredRoomsCount를 추가하지 않아서 에러가 난다. 추후 수정 필요. */}
 
           <Link href="/search" className="ml-2 back-to-search">
-            <i className="fa fa-arrow-left"></i> Back to Search
+            <i className="fa fa-arrow-left me-1"></i> Back to Search
           </Link>
           <div className="row mt-4">
             {rooms?.length === 0 ? (
