@@ -1,7 +1,7 @@
 import Home from "@/components/Home";
 import Error from "./error";
 
-export const dynamic = "force-dynamic"; // 이렇게 선언하면, 페이지가 항상 동적으로 생성됨
+// export const dynamic = "force-dynamic"; // 이렇게 선언하면, 페이지가 항상 동적으로 생성됨
 
 // const getRooms = async () => {
 //   const res = await fetch("http://localhost:3000/api/rooms"); // 데이터가 캐시됨
@@ -27,6 +27,11 @@ export const dynamic = "force-dynamic"; // 이렇게 선언하면, 페이지가 
 //   // 다른 방법으로는
 //   // export const revalidate = 10; 을 코드상단 또는 상위 컴포넌트에 선언하는 방법이 있음. 이 경우 { next: { revalidate } }를 사용하지 않아도 됨
 // };
+
+export const metadata = {
+  title: "HomePage - BookIT",
+  // description: "Home Page",
+};
 
 const getRooms = async () => {
   const res = await fetch(`${process.env.API_URL}/api/rooms`);
