@@ -2,8 +2,18 @@
 
 import React, { useEffect } from "react";
 import RoomItem from "./room/RoomItem";
+import { IRoom } from "@/backend/models/room";
 
-const Home = () => {
+interface Props {
+  data: {
+    success: boolean;
+    resPerPage: number;
+    filteredRoomsCount: number;
+    rooms: IRoom[];
+  };
+}
+
+const Home = ({ data }: Props) => {
   return (
     <div>
       <div>

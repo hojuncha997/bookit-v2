@@ -1,6 +1,7 @@
 import Home from "@/components/Home";
+import Error from "./error";
 
-// export const dynamic = "force-dynamic"; // 이렇게 선언하면, 페이지가 항상 동적으로 생성됨
+export const dynamic = "force-dynamic"; // 이렇게 선언하면, 페이지가 항상 동적으로 생성됨
 
 // const getRooms = async () => {
 //   const res = await fetch("http://localhost:3000/api/rooms"); // 데이터가 캐시됨
@@ -28,16 +29,17 @@ import Home from "@/components/Home";
 // };
 
 const getRooms = async () => {
-  const res = await fetch("http://localhost:3000/api/rooms", {
-    next: { tags: ["Rooms"] }, // on-demand revalidation: 경로나 태그를 지정하여 해당 경우에만 재검증
-  });
-  const data = await res.json();
-  return data;
+  const res = await fetch(`${process.env.API_URL}/api/rooms`);
+  // console.log("here, and res is", res.json());
+  return res.json();
 };
 
 export default async function HomePage() {
-  const rooms = await getRooms();
-  console.log("resPerPage", rooms.resPerPage); // 5
+  const data = await getRooms();
 
-  return <Home />;
+  if (data?.message) {
+    return <Error error={data} />;
+  }
+
+  return <Home data={data} />;
 }
