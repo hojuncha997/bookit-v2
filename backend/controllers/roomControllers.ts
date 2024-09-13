@@ -11,7 +11,7 @@ export const allRooms = catchAsyncErrors(async (req: NextRequest) => {
   // Next.js에서는 URL을 사용하여 요청을 객체로 만들고 searchParams를 사용하여 쿼리 문자열을 가져올 수 있다.
   const { searchParams } = new URL(req.url);
 
-  throw new ErrorHandler("hello", 400);
+  // throw new ErrorHandler("hello", 400);
 
   const queryStr: any = {};
   searchParams.forEach((value, key) => {
