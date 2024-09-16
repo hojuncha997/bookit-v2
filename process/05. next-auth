@@ -1,0 +1,10 @@
+1. next-auth: 로그인을 간편하게 만들어주는 라이브러리
+
+2. 설치: npm i next-auth --save
+
+3. next-auth.js.org/providers에서 여러 사이트의 Social 크레덴셜을 사용할 수 있음.
+    만약 고유의 크레덴셜을 만들어 사용하려면 Credentials를 선택하여 참고하면 됨.
+
+    /app/api/auth의 경로를 따라야 하므로 해당 디렉토리가 없는 경우 생성해야 함. 
+    그리고 그 안에 [...nextauth] 디렉토리를 만들고 route.ts 파일을 생성함.
+    이 route.ts 파일에 로직을 작성함.

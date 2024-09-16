@@ -4,6 +4,10 @@ const nextConfig = {
     API_URL: "http://localhost:3000",
     DB_LOCAL_URI: "mongodb://127.0.0.1:27017/bookit-v2",
     DB_URI: "",
+
+    // next-auth가 사용하는 환경 변수(필수)
+    NEXTAUTH_URL: "http://localhost:3000",
+    NEXTAUTH_SECRET: "random_secret_for_me",
   },
 
   images: {
