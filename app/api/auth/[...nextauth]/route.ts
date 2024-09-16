@@ -44,8 +44,8 @@ async function auth(req: NextApiRequest, res: NextApiResponse) {
 
     callbacks: {
       jwt: async ({ token, user }) => {
-        console.log("token =>", token);
-        console.log("user =>", user);
+        // console.log("token =>", token);
+        // console.log("user =>", user);
         user && (token.user = user); // user가 존재하면 token에 user를 넣어준다.
 
         // TODO - update session when user is updated
@@ -55,7 +55,10 @@ async function auth(req: NextApiRequest, res: NextApiResponse) {
       session: async ({ session, token }) => {
         session.user = token.user as IUser; //session.user에 IUser 타입으로 token.user를 넣어준다.
 
-        console.log("session =>", session);
+        // @ts-ignore
+        delete session?.user?.password; // session.user.password를 삭제한다.
+        // console.log("session =>", session);
+
         return session;
       },
     },
