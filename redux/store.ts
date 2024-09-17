@@ -1,7 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
+import userReducer from "./features/userSlice";
 
 export const store = configureStore({
-  reducer: {},
+  reducer: {
+    // 여기에 추가적인 reducer를 추가
+    auth: userReducer,
+  },
 });
 
 export type RootState = ReturnType<typeof store.getState>;
@@ -70,9 +74,6 @@ useDispatch는 Redux 스토어의 dispatch 함수에 대한 참조를 제공한�
 ---
 
 
-
-
-*/
 
 
 */
