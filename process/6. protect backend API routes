@@ -1,0 +1,73 @@
+app/api/me/update/route.ts
+backend/middleWares/auth.ts
+backend/controllers/controllers 
+
+위 파일들 관련
+
+---------------------------------
+
+-------요약 -------------
+
+
+실행 순서:
+
+1. 클라이언트가 PUT 요청을 송신
+2. Next.js가 route.ts(요청 진입부)의 PUT 함수를 호출(파일에서 호출하는 부분은 없지만 프레임워크가 내부적으로 처리. 개발자는 정의하기만 하면됨).
+3. PUT 함수는 router.run(request, ctx)를 실행
+4. 라우터는 미들웨어(isAuthenticatedUser)를 거쳐 컨트롤러의 updateProfile 핸들러를 실행
+5-1. 세션이 존재하지 않는 경우 auth.ts에서 401 상태 코드와 함께 메시지를 응답으로 반환하며 응답과정이 종료됨.
+5-2. updateProfile 핸들러 내에서 User.findByIdAndUpdate()가 실행되어 응답이 반환되므로써 응답과정이 종료됨.
+
+
+-----상세-----------------
+
+
+HTTP 요청이 들어왔을 때 동작하는 과정과 순서:
+
+1. HTTP 요청 수신:
+   - 클라이언트가 `/api/me/update`로 PUT 요청을 보냄
+
+2. Next.js 라우팅:
+   - Next.js가 요청을 받아 해당하는 route.ts 파일을 찾아 실행
+
+3. route.ts 실행:
+   - PUT 함수가 호출됨
+
+4. 데이터베이스 연결:
+   - `dbConnect()` 함수가 실행되어 데이터베이스 연결을 설정
+
+5. Router 실행:
+   - `router.run(request, ctx)`가 호출되어 라우터의 미들웨어 체인을 시작
+
+6. 인증 미들웨어 실행:
+   - `isAuthenticatedUser` 미들웨어가 실행됨
+   - `getToken`을 사용하여 세션 토큰을 확인
+   - 토큰이 없으면 401 에러를 반환
+   - 토큰이 있으면 `req.user`에 사용자 정보를 설정하고 다음 미들웨어로 넘어감
+
+7. 컨트롤러 실행:
+   - `updateProfile` 컨트롤러가 실행됨
+   - `catchAsyncErrors` 래퍼 함수가 에러 처리를 담당
+
+8. 요청 처리:
+   - `req.json()`을 통해 요청 본문을 파싱
+   - 사용자 데이터를 추출
+
+9. 데이터베이스 업데이트:
+   - `User.findByIdAndUpdate`를 사용하여 데이터베이스의 사용자 정보를 업데이트
+
+10. 응답 반환:
+    - 업데이트된 사용자 정보와 함께 성공 응답을 반환
+
+11. 에러 처리:
+    - 과정 중 에러가 발생하면 `catchAsyncErrors`가 이를 잡아 적절한 에러 응답을 반환
+
+12. 응답 전송:
+    - Next.js가 최종 응답을 클라이언트에게 전송
+
+이 과정에서 Next.js의 라우팅 시스템, 미들웨어 체인, 컨트롤러 패턴, 그리고 데이터베이스 상호작용이 모두 조화롭게 작동하여 사용자 인증부터 프로필 업데이트까지의 전체 프로세스를 처리함.
+
+
+
+
+
