@@ -84,4 +84,5 @@
 
     그리고 기존에 data.user를 사용하던 곳에서 data를 지우고 user만 남겨둔다. store의 user값을 사용하기 위해서이다.
 
-    
+
+8. redux toolkit query( 선택 )

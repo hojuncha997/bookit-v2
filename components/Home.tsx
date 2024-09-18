@@ -28,7 +28,7 @@ const Home = ({ data }: Props) => {
         <section id="rooms" className="container mt-5">
           <h2 className="mb-3 ml-2 stays-heading">
             {location
-              ? `${rooms?.length} rooms found in ${location}`
+              ? `${filteredRoomsCount} rooms found in ${location}`
               : "All rooms"}
           </h2>
           {/* <h2 className="mb-3 ml-2 stays-heading">{location ? `${rooms?.filteredRoomsCount} rooms found in ${location}` : "All rooms" }</h2> // 이걸 써야하는데 스키마에 filteredRoomsCount를 추가하지 않아서 에러가 난다. 추후 수정 필요. */}
